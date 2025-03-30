@@ -1,0 +1,19 @@
+nginx:
+- installed nginx
+- cs555.conf file binds 127.0.0.1:80 to 127.0.0.1:5000 (which is where my gunicorn is running)
+     put it in /etc/nginx/sites-enabled, shouldn't need to do anything else
+
+flask:
+- db.py was run to make a simple db in database.db which just has two entries
+     used the tutorial here: https://www.digitalocean.com/community/tutorials/how-to-use-an-sqlite-database-in-a-flask-application
+     used DB Browser for SQLite to make sure the database looked okay
+- cs555.py is the flask app which is still in work (only the home function works, index and delete are placeholders), it currently displays the title of the first database entry
+- make sure gunicorn and flask are installed
+- i made a python virtual env in the folder with:
+     python3 -m venv venv
+     source venv/bin/activate
+     pip install gunicorn flask
+- make sure in virtual environment (venv/bin/activate) then start the flask app behind gunicorn with, this starts the app using port 5000:
+     gunicorn --bind 127.0.0.1:5000 cs555:app
+
+if you have nginx and gunicorn properly setup, you should be able to see the webpage which just says "Test1" at 127.0.0.1:5000 and at localhost in the browser
