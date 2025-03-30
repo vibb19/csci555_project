@@ -9,7 +9,9 @@ def home():
     conn = db.get_db_connection()
     posts = conn.execute("SELECT * FROM posts").fetchall()
     conn.close()
-    return posts[0]['title']
+    image_path = '"' + posts[0]['image'] + '"'
+    print(image_path)
+    return posts[0]['title'] + '<br><img src=' + image_path + '>'
 
 @app.route('/', methods=['GET', 'POST'])
 def index():

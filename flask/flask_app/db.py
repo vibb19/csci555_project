@@ -17,12 +17,12 @@ def create_db():
 def insert_random_entries():
     conn = get_db_connection()
     cursor = conn.cursor()
-    cursor.execute("INSERT INTO posts (title, content) VALUES (?, ?)",
-            ('Test1', 'Putting some random stuff in for now')
+    cursor.execute("INSERT INTO posts (title, content, image) VALUES (?, ?, ?)",
+            ('Test1', 'Putting some random stuff in for now', '/static/images/Cat_November_2010-1a.jpg')
             )
 
-    cursor.execute("INSERT INTO posts (title, content) VALUES (?, ?)",
-            ('Test2', 'Putting some more random stuff in for now')
+    cursor.execute("INSERT INTO posts (title, content, image) VALUES (?, ?, ?)",
+            ('Test2', 'Putting some more random stuff in for now', '/static/images/Cat_November_2010-1a.jpg')
             )
     conn.commit()
     conn.close()
