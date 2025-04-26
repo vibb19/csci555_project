@@ -17,3 +17,30 @@ flask:
      gunicorn --bind 127.0.0.1:5000 cs555:app
 
 if you have nginx and gunicorn properly setup, you should be able to see the webpage which just says "Test1" at 127.0.0.1:5000 and at localhost in the browser
+
+
+cloudlab:
+- go to experiments, start experiment, pick profile as small lan, configure 2 nodes w/ ubuntu 24.x
+- first, setup for nginx and gunicorn on the same node
+- open shell for node0
+	Sudo apt-get update (needed otherwise package installer can't find nginx/gunicorn)
+	Sudo apt install nginx (at this point, i could see my nginx page at http://ms0826.utah.cloudlab.us/)
+	Sudo apt install gunicorn
+	Sudo apt install git (i think this was already installed)
+	Git clone https://github.com/vibb19/csci555_project.git
+	Go to project folder and run gunicorn same steps as locally (Had to bind to the external IP of the node, after that was able to see the flask app at http://ms0826.utah.cloudlab.us/:5000)
+	Copy nginx sites-enabled cs555.conf from GitHub to /etc/nginx/sites-enabled, delete default conf already in the folder
+	Restart nginx service (sudo systemctl restart service-name, sudo systemctl status service-name)
+	Restart gunicorn binding to localhost (127.0.0.1:5000)
+	Now you could be able to see the flask app at http://ms0826.utah.cloudlab.us/
+- next, setup nginx and gunicorn running on different nodes (gunicorn on node0, nginx on node1)
+- open shell for node1
+	Sudo apt-get update (needed otherwise package installer can't find nginx/gunicorn)
+	Sudo apt install nginx (verified i could see my nginx page at http://ms0828.utah.cloudlab.us/)
+	Git clone https://github.com/vibb19/csci555_project.git
+	Copy nginx sites-enabled cs555-multinode.conf (this is the same as cs555 but has the LAN ip 10.10.1.1 for node0) from GitHub to /etc/nginx/sites-enabled, delete default conf already in the folder
+	Restart nginx service (sudo systemctl restart service-name, sudo systemctl status service-name)
+- go back to node0 shell
+	restart gunicorn binding to 10.10.1.1:5000
+	verified can see flask app at http://ms0828.utah.cloudlab.us/
+
