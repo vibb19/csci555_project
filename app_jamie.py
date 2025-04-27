@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, abort
 import sqlite3, redis, json, time
 
 app = Flask(__name__)
@@ -75,19 +75,22 @@ def get_user(id):
     cached = cache.get(id)
     if cached:
         app.logger.info("Cache HIT")
-        users = json.loads(cached)
+        user = json.loads(cached)
         source = "🔵 Served from Cache"
     else:
         app.logger.info("Cache MISS")
         user = fetch_user_from_db(id)
         # Store JSON-encoded result in Redis with TTL
-        cache.set(CACHE_KEY, json.dumps(user), ex=CACHE_TTL)
+        cache.set(id, json.dumps(user), ex=CACHE_TTL)
         source = "🟢 Served from Database"
-
-    # Build a simple HTML response
-    lines = [f"{source}"]
-    lines += [f"{user['id']}: {user['name']}"]
-    return "<br>".join(lines)
+    
+    if user:
+        # Build a simple HTML response
+        lines = [f"{source}"]
+        lines += [f"{user['id']}: {user['name']}"]
+        return "<br>".join(lines)
+    else:
+        return "user not found", 404
 
 @app.route('/clear-cache')
 def clear_cache():
