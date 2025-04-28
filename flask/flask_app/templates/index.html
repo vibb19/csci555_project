@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ username }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<div class="header-container">
+    <div class="profile-container">
+        <img src="{{ profile_image }}" alt="Profile Picture">
+    </div>
+    <h1>{{ username }}'s gallery</h1>
+</div>
+
+<div class="image-gallery">
+    <div class="image-container">
+        <img src="{{ user_image1 }}" alt="Image1">
+    </div>
+    <div class="image-container">
+        <img src="{{ user_image2 }}" alt="Image2">
+    </div>
+    <div class="image-container">
+        <img src="{{ user_image3 }}" alt="Image3">
+    </div>
+</div>
+</body>
+</html>
