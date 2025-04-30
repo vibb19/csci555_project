@@ -24,7 +24,7 @@ dictConfig({
 # -------------
 DATABASE = 'mydatabase.db'
 CACHE_KEY = 'all_users'
-CACHE_TTL = 100  # cache TTL in seconds
+# CACHE_TTL = 100  # cache TTL in seconds
 NUM_RECORDS = 20000
 
 # Connect to Redis (make sure redis-server is running)
@@ -40,7 +40,7 @@ def get_db_connection():
 
 def fetch_users_from_db():
     """Simulate a slow database query."""
-    time.sleep(1)  # optional: simulate latency
+    # time.sleep(1)  # optional: simulate latency
     conn = get_db_connection()
     users = conn.execute('SELECT * FROM users').fetchall()
     conn.close()
@@ -49,7 +49,7 @@ def fetch_users_from_db():
 
 def fetch_user_from_db(id):
     """Simulate a slow database query."""
-    time.sleep(1)  # optional: simulate latency
+    # time.sleep(1)  # optional: simulate latency
     conn = get_db_connection()
     cursor = conn.cursor()
     cursor.execute('SELECT * FROM users WHERE id = ?', (id,))
@@ -111,9 +111,9 @@ def get_user(id):
     else:
         app.logger.info("Cache MISS for id " + str(id))
         user = fetch_user_from_db(id)
-        # Store JSON-encoded result in Redis with TTL
+        # Store JSON-encoded result in Redis
         if user:  # Only cache if user exists
-            cache.set(id, json.dumps(user), ex=CACHE_TTL)
+            cache.set(id, json.dumps(user))
         source = "🟢 Served from Database"
     
     if user:
@@ -143,7 +143,6 @@ def clear_user_cache(id):
     cache.delete(id)
     return f"Cache {id} cleared!"
 
-# New metrics endpoint
 @app.route('/metrics')
 def redis_metrics():
     try:
