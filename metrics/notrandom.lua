@@ -54,7 +54,7 @@ response = function(status, headers, body)
     local redis_cache_status = headers["X-App-Cache-Status"] --TBD: update with correct header
     
     if nginx_cache_status then
-       if nginx_cache_hits == "HIT" then
+       if nginx_cache_status == "HIT" then
            cache_hits = cache_hits + 1
            nginx_cache_hits = nginx_cache_hits + 1
        end

@@ -1,4 +1,4 @@
-from flask import Flask, abort, logging, render_template, url_for
+from flask import Flask, abort, logging, render_template, url_for, make_response
 from logging.config import dictConfig
 import sqlite3, redis, json, time
 
@@ -108,8 +108,14 @@ def get_user(id):
         user_image1 = url_for('static', filename=f"images/{user['img1']}")
         user_image2 = url_for('static', filename=f"images/{user['img2']}")
         user_image3 = url_for('static', filename=f"images/{user['img3']}")
-        print(profile_image)
-        return render_template("index.html", username=user['name'], profile_image=profile_image, user_image1=user_image1, user_image2=user_image2, user_image3=user_image3)
+        
+        #print(profile_image)
+        response = make_response(render_template("index.html", username=user['name'], profile_image=profile_image, user_image1=user_image1, user_image2=user_image2, user_image3=user_image3))
+        if cached:
+            response.headers['X-App-Cache-Status'] = 'HIT'
+        else:
+            response.headers['X-App-Cache-Status'] = 'MISS'
+        return response
     else:
         return "user not found", 404
 

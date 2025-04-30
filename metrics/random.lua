@@ -52,13 +52,17 @@ response = function(status, headers, body)
     local nginx_cache_status = headers["X-Cache-Status"]
     local redis_cache_status = headers["X-App-Cache-Status"] --TBD: update with correct header
     
+    --print(nginx_cache_status)
+    --print(redis_cache_status)
+    
     if nginx_cache_status then
-       if nginx_cache_hits == "HIT" then
+       if string.match(tostring(nginx_cache_status), "HIT") then
+           --print("!! nginx HIT")
            cache_hits = cache_hits + 1
            nginx_cache_hits = nginx_cache_hits + 1
        end
     elseif redis_cache_status then
-        if redis_cache_status == "HIT" then
+        if string.match(tostring(redis_cache_status), "HIT") then
            cache_hits = cache_hits + 1
            redis_cache_hits = redis_cache_hits + 1
        end   
