@@ -31,7 +31,7 @@ end
 request = function()
    requests = requests + 1
    
-   local reqid = math.random(11,100)
+   local reqid = math.random(1,20000)
    local path = "/user/"..reqid
    --print("id "..reqid)
    return wrk.format("GET", path)
